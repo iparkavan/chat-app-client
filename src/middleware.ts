@@ -6,21 +6,22 @@ export async function middleware(request: NextRequest) {
   const { nextUrl } = request;
   const token = request.cookies.get(ACCESS_TOKEN)?.value;
 
-  const publicRoutes =
-    request.nextUrl.pathname === "/login" ||
-    request.nextUrl.pathname === "/signup";
+  console.log("Middleware Cookies:", request.cookies.getAll()); // Debugging
+  console.log("Middleware Token:", token); // Debugging
 
-  if (publicRoutes) {
-    if (token) {
-      return NextResponse.redirect(new URL(routes.chatPage, nextUrl));
-    }
-  } else {
-    if (!token) {
-      return NextResponse.redirect(new URL(routes.login, nextUrl));
-    }
-  }
+  // const publicRoutes = ["/login", "/signup"].includes(nextUrl.pathname);
+
+  // if (publicRoutes && token) {
+  //   return NextResponse.redirect(new URL(routes.chatPage, nextUrl));
+  // }
+
+  // if (!publicRoutes && !token) {
+  //   return NextResponse.redirect(new URL(routes.login, nextUrl));
+  // }
+
+  // return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/login", "/signup"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"], // Matches all pages except static assets
 };
