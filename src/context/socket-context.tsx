@@ -13,9 +13,11 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const socket = useRef<Socket | null>(null);
   const { userInfo } = useAuthslice();
 
+  console.log("Socket connecting to:", HOST);
+
   useEffect(() => {
     if (userInfo) {
-      socket.current = io(HOST || "", {
+      socket.current = io("https://chat-app-server-q8xe.onrender.com", {
         withCredentials: true,
         query: { userId: userInfo.id },
       });
