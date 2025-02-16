@@ -17,7 +17,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (userInfo) {
-      socket.current = io("https://chat-app-server-q8xe.onrender.com", {
+      socket.current = io("wss://chat-app-server-q8xe.onrender.com", {
         withCredentials: true,
         query: { userId: userInfo.id },
       });
