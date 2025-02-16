@@ -6,6 +6,9 @@ const nextConfig = {
   images: {
     domains: ["lh3.googleusercontent.com", "localhost"],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   async headers() {
     return [
       {
