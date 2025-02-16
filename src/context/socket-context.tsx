@@ -1,10 +1,6 @@
 "use client";
 
 import { HOST } from "@/lib/constants/constsnt";
-
-if (!HOST) {
-  throw new Error("HOST is not defined");
-}
 import { useAuthslice } from "@/store/slices/auth-slice";
 import { useChatSlice } from "@/store/slices/chat-slice";
 import { MessagesTypes } from "@/types/messages";
@@ -21,14 +17,10 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (userInfo) {
-      if (HOST) {
-        socket.current = io(HOST, {
-          withCredentials: true,
-          query: { userId: userInfo.id },
-        });
-      } else {
-        console.error("HOST is not defined");
-      }
+      socket.current = io("https://chat-app-server-q8xe.onrender.com", {
+        withCredentials: true,
+        query: { userId: userInfo.id },
+      });
       // Server Socket Connection
       socket.current?.on("connect", () => {
         console.log("Connected to socket server");
