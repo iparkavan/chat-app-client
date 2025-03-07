@@ -13,11 +13,12 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const socket = useRef<Socket | null>(null);
   const { userInfo } = useAuthslice();
 
-  console.log("Socket connecting to:", HOST);
+  const host = HOST ?? "default_host_value";
+  console.log("Socket connecting to:", host);
 
   useEffect(() => {
     if (userInfo) {
-      socket.current = io("https://chat-app-server-q8xe.onrender.com", {
+      socket.current = io(host, {
         withCredentials: true,
         transports: ["websocket", "polling"], // ✅ Prevents connection issues
         query: { userId: userInfo.id },
