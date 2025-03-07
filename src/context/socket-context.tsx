@@ -17,10 +17,12 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (userInfo) {
-      socket.current = io("wss://chat-app-server-q8xe.onrender.com", {
+      socket.current = io("https://chat-app-server-q8xe.onrender.com", {
         withCredentials: true,
+        transports: ["websocket", "polling"], // ✅ Prevents connection issues
         query: { userId: userInfo.id },
       });
+
       // Server Socket Connection
       socket.current?.on("connect", () => {
         console.log("Connected to socket server");
