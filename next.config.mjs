@@ -4,7 +4,7 @@ import withSvgr from "next-svgr";
 const nextConfig = {
   // Your existing Next.js configuration options here
   images: {
-    domains: ["lh3.googleusercontent.com", "localhost"],
+    domains: ["lh3.googleusercontent.com", "localhost", "chat-app-server-q8xe.onrender.com"],
   },
   typescript: {
     ignoreBuildErrors: true,

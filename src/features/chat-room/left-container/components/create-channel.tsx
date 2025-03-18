@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { axios } from "@/lib/axios";
 import {
+  CREATE_CHANNEL_ROUTE,
   GET_ALL_CONTACTS_ROUTES,
   SEARCHCONTACTSROUTES,
 } from "@/lib/api-routes";
@@ -32,15 +33,25 @@ import { Command } from "@/components/ui/command";
 import { CommandEmpty } from "cmdk";
 import MultipleSelector from "@/components/ui/multiple-selector";
 
+type selectedContactsTypes = {
+  label: string;
+  value: string;
+};
+
 const CreateChannel = () => {
-  const { setSelectedChatType, setSelectedChatData } = useChatSlice();
+  const { setSelectedChatType, setSelectedChatData, addChannels } =
+    useChatSlice();
 
   const [newChannelModal, setNewChannelModal] = useState(false);
   const [searchedContacts, setSearchedContacts] = useState<ContactsTypes[]>([]);
 
   const [allContacts, setAllContacts] = useState([]);
-  const [selectedContacts, setSelectedContacts] = useState([]);
+  const [selectedContacts, setSelectedContacts] = useState<
+    selectedContactsTypes[]
+  >([]);
   const [channelName, setChannelName] = useState("");
+
+  console.log("selectedContacts", selectedContacts);
 
   useEffect(() => {
     const getData = async () => {
@@ -54,39 +65,29 @@ const CreateChannel = () => {
     getData();
   }, []);
 
-  console.log(allContacts);
+  const createChannel = async () => {
+    try {
+      if (channelName.length > 0 && selectedContacts.length > 0) {
+        const response = await axios.post(
+          CREATE_CHANNEL_ROUTE,
+          {
+            name: channelName,
+            members: selectedContacts.map((item) => item.value),
+          },
+          { withCredentials: true }
+        );
 
-  const createChannel = async () => {};
-
-  // const searchContacts = async (searchTerms: string) => {
-  //   try {
-  //     if (searchTerms.length >= 0) {
-  //       const response = await axios.post(
-  //         SEARCHCONTACTSROUTES,
-  //         { searchTerms },
-  //         {
-  //           withCredentials: true,
-  //         }
-  //       );
-  //       if (response.status === 200 && response.data.contacts) {
-  //         setSearchedContacts(response.data.contacts);
-  //       } else {
-  //         setSearchedContacts([]);
-  //       }
-  //     } else {
-  //       setSearchedContacts([]);
-  //     }
-  //   } catch (error: any) {
-  //     console.log(error.message);
-  //   }
-  // };
-
-  // const selectNewContact = (contact: ContactsTypes) => {
-  //   setSelectedChatType("contact");
-  //   setSelectedChatData(contact);
-  //   setSearchedContacts([]);
-  //   setIsNewContactModal(false);
-  // };
+        if (response.status === 201) {
+          setChannelName("");
+          setSelectedContacts([]);
+          setNewChannelModal(false);
+          addChannels(response.data.channel);
+        }
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
 
   return (
     <Dialog open={newChannelModal} onOpenChange={setNewChannelModal}>

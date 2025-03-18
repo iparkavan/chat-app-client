@@ -7,6 +7,9 @@ export type senderReciver = {
 };
 
 export type MessagesTypes = {
+  channel: any;
+  channe: any;
+  channelId: string | undefined;
   _id: string;
   sender: string;
   recipient: string;

@@ -15,9 +15,7 @@ export default function RootLayout({
   return (
     <ClientProviders>
       <div className="">
-        <div className="h-screen border rounded-2xl">
-          <div className="rounded-2xl w-full">{children}</div>
-        </div>
+        <div className="rounded-2xl">{children}</div>
       </div>
     </ClientProviders>
   );

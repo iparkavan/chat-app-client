@@ -1,6 +1,7 @@
 import { UserInfoTypes } from "@/types/authentication-types";
 import { ContactsTypes } from "@/types/contacts-types";
 import { MessagesTypes } from "@/types/messages";
+import { channel } from "diagnostics_channel";
 import { create } from "zustand";
 
 type ChatTypes = "channel" | "contact";
@@ -14,7 +15,9 @@ type ChatSliceTypes = {
   isDownloading: boolean;
   fileUploadProgress: number;
   fileDownloadProgress: number;
+  channels: any[];
 
+  setChannels: (channels: any) => void;
   setIsUploading: (isUploading: boolean) => void;
   setIsDownloading: (isDownloading: boolean) => void;
   setFileUploadProgress: (fileUploadProgress: number) => void;
@@ -23,6 +26,8 @@ type ChatSliceTypes = {
   setSelectedChatData: (selectedChatData: ContactsTypes) => void;
   setSelectedChatMessages: (selectedChatMessages: MessagesTypes[]) => void;
   setDirectMessagesContacts: (directMessagesContacts: ContactsTypes[]) => void;
+
+  addChannels: (channel: any) => void;
   closeChat: () => void;
   addMessage: (message: any) => void;
 };
@@ -36,7 +41,9 @@ export const useChatSlice = create<ChatSliceTypes>()((set, get) => ({
   isDownloading: false,
   fileUploadProgress: 0,
   fileDownloadProgress: 0,
+  channels: [],
 
+  setChannels: (channels: any) => set({ channels }),
   setIsUploading: (isUploading: boolean) => set({ isUploading }),
   setIsDownloading: (isDownloading: boolean) => set({ isDownloading }),
   setFileUploadProgress: (fileUploadProgress: number) =>
@@ -51,13 +58,17 @@ export const useChatSlice = create<ChatSliceTypes>()((set, get) => ({
     set({ selectedChatMessages }),
   setDirectMessagesContacts: (directMessagesContacts: ContactsTypes[]) =>
     set({ directMessagesContacts }),
+
+  addChannels: (channel: any) => {
+    const channels = get().channels;
+    set({ channels: [...channels, channel] });
+  },
   closeChat: () =>
     set({
       selectedChatType: undefined,
       selectedChatData: undefined,
       selectedChatMessages: [],
     }),
-
   addMessage: (message) => {
     const selectedChatMessages = get().selectedChatMessages;
     const selectedChatType = get().selectedChatType;

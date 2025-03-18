@@ -77,7 +77,11 @@ const ContactList: React.FC<ContactListProps> = ({
                 )}
               </div>
             )}
-            {isChannel && <div>#</div>}
+            {isChannel && (
+              <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-50">
+                #
+              </div>
+            )}
             <div>
               {isChannel ? (
                 <p className="font-semibold text-sm">{contact.name}</p>

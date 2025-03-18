@@ -1,4 +1,5 @@
 export type ContactsTypes = {
+  id: any;
   name: string;
   _id: string;
   email: string;

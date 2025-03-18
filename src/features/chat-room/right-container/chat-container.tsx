@@ -5,7 +5,7 @@ import ChatArea from "./chat-area";
 
 const ChatContainer = () => {
   return (
-    <section>
+    <section className="h-screen">
       <div className="px-8 border-b">
         <ChatHeader />
       </div>

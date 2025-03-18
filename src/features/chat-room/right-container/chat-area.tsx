@@ -8,12 +8,13 @@ import { toast } from "sonner";
 import { axios } from "@/lib/axios";
 import { GETALLMESSAGESROUTES } from "@/lib/api-routes";
 import Image from "next/image";
-import { HOST } from "@/lib/constants/constsnt";
+import { bgColors, HOST } from "@/lib/constants/constsnt";
 import { MdFolderZip } from "react-icons/md";
 import { IoMdArrowRoundDown } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { IoCloseSharp } from "react-icons/io5";
 import { AxiosProgressEvent } from "axios";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 const ChatArea = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -155,6 +156,7 @@ const ChatArea = () => {
               </div>
             )}
             {selectedChatType === "contact" && renderDirectMessage(message)}
+            {selectedChatType === "channel" && renderChannelMessage(message)}
           </div>
         );
       }
@@ -233,38 +235,107 @@ const ChatArea = () => {
     </div>
   );
 
+  const renderChannelMessage = (message: MessagesTypes): JSX.Element | null => {
+    console.log("render channel message", message);
+
+    const isSender =
+      (message.sender as unknown as { _id: string })._id === userInfo?.id;
+    const profileImage = message?.sender?.profileImage;
+    const bgColor = bgColors[message?.sender?.bgColor as number];
+    const initials =
+      message?.sender?.firstName && message?.sender.lastName
+        ? `${message.sender.firstName.charAt(
+            0
+          )}${message.sender.lastName.charAt(0)}`
+        : userInfo?.email?.charAt(0);
+
+    return (
+      <div
+        className={cn(
+          "flex items-end gap-2",
+          isSender ? "justify-end" : "justify-start"
+        )}
+      >
+        {/* Avatar for Receiver */}
+        {!isSender && (
+          <div className="flex-shrink-0">
+            {profileImage ? (
+              <Avatar className="h-8 w-8">
+                <AvatarImage
+                  src={`${HOST}/${profileImage}`}
+                  alt="profile"
+                  className="object-cover w-full h-full rounded-full"
+                />
+              </Avatar>
+            ) : (
+              <div
+                className="h-8 w-8 flex items-center justify-center rounded-full text-xs font-semibold text-white"
+                style={{ backgroundColor: bgColor, transition: "all .3s" }}
+              >
+                {initials}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Message Content */}
+        <div className="flex w-full">
+          {message.messageType === "text" && (
+            <div
+              className={cn(
+                "inline-block p-3 rounded-xl my-1 max-w-[60%] break-words",
+                isSender
+                  ? "bg-primary-foreground text-primary dark:text-primary"
+                  : "bg-primary text-white dark:bg-primary dark:text-black"
+              )}
+            >
+              {message.content}
+              {/* Timestamp */}
+              <div className="text-xs text-end mt-1 text-muted-foreground">
+                {moment(message.timestamp).format("LT")}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="h-[88vh] overflow-y-scroll w-full">
+    <div className="h-[calc(100vh-7rem)] overflow-y-auto w-full">
       <div className="mx-8 my-2">
         {renderMessages()}
         <div ref={scrollRef} />
+
         {showImage && (
-          <div className="fixed z-10 top-0 left-0 h-[100vh] w-[100vw] flex items-center justify-center backdrop-blur-lg">
-            <div className="w-[80vw] relative h-[80vh]">
+          <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/60 backdrop-blur-lg">
+            {/* Image Container */}
+            <div className="relative w-[90vw] max-w-3xl h-[80vh] flex flex-col items-center justify-center">
               <Image
-                className="rounded-lg"
+                className="rounded-lg object-contain"
                 src={`${HOST}/${imageUrl}`}
                 fill
-                // width={"1000"}
                 alt="fileUrl"
               />
-            </div>
-            <div className="flex gap-5 fixed top-5 mt-5">
-              <Button
-                className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
-                onClick={() => downloadFile(imageUrl as string)}
-              >
-                <IoMdArrowRoundDown />
-              </Button>
-              <Button
-                className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
-                onClick={() => {
-                  setShowImage(false);
-                  setImageUrl(null);
-                }}
-              >
-                <IoCloseSharp />
-              </Button>
+
+              {/* Close & Download Buttons */}
+              <div className="absolute top-5 right-5 flex gap-3">
+                <Button
+                  className="bg-black/30 p-3 text-2xl rounded-full hover:bg-black/50 transition-all duration-300"
+                  onClick={() => downloadFile(imageUrl as string)}
+                >
+                  <IoMdArrowRoundDown />
+                </Button>
+                <Button
+                  className="bg-black/30 p-3 text-2xl rounded-full hover:bg-black/50 transition-all duration-300"
+                  onClick={() => {
+                    setShowImage(false);
+                    setImageUrl(null);
+                  }}
+                >
+                  <IoCloseSharp />
+                </Button>
+              </div>
             </div>
           </div>
         )}

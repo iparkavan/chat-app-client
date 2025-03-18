@@ -3,7 +3,10 @@ import ChatUserHeader from "./chat-users-header";
 import ChatUserCard from "./components/contacts-list";
 import { toast } from "sonner";
 import { axios } from "@/lib/axios";
-import { GET_DM_CONTACTS_ROUTES } from "@/lib/api-routes";
+import {
+  GET_DM_CONTACTS_ROUTES,
+  GET_USER_CHANNEL_ROUTE,
+} from "@/lib/api-routes";
 import { useChatSlice } from "@/store/slices/chat-slice";
 import ContactList from "./components/contacts-list";
 import {
@@ -17,7 +20,12 @@ import { FaPlus } from "react-icons/fa";
 import CreateChannel from "./components/create-channel";
 
 const ChatUsersContainer = () => {
-  const { directMessagesContacts, setDirectMessagesContacts } = useChatSlice();
+  const {
+    directMessagesContacts,
+    setDirectMessagesContacts,
+    channels,
+    setChannels,
+  } = useChatSlice();
 
   useEffect(() => {
     const getContacts = async () => {
@@ -35,6 +43,22 @@ const ChatUsersContainer = () => {
       }
     };
 
+    const getChannels = async () => {
+      try {
+        const response = await axios.get(GET_USER_CHANNEL_ROUTE, {
+          withCredentials: true,
+        });
+
+        if (response.data.channels) {
+          setChannels(response.data.channels);
+        }
+      } catch (error: any) {
+        console.log(error);
+        toast(error.message);
+      }
+    };
+
+    getChannels();
     getContacts();
   }, []);
 
@@ -52,6 +76,9 @@ const ChatUsersContainer = () => {
         <div className="flex items-center justify-between mt-2">
           <Heading heading="Channels" />
           <CreateChannel />
+        </div>
+        <div className="max-h-[38vh] overflow-y-auto scrollbar-hidded">
+          <ContactList contacts={channels} isChannel={true} />
         </div>
       </section>
     </div>
