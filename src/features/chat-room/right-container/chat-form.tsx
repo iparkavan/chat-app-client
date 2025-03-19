@@ -184,6 +184,7 @@ const ChatForm = () => {
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setMessage(e.target.value)
           }
+          autoFocus
           value={message}
           placeholder="Type a message"
         />

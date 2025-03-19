@@ -51,8 +51,6 @@ const CreateChannel = () => {
   >([]);
   const [channelName, setChannelName] = useState("");
 
-  console.log("selectedContacts", selectedContacts);
-
   useEffect(() => {
     const getData = async () => {
       const response = await axios.get(GET_ALL_CONTACTS_ROUTES, {

@@ -68,13 +68,7 @@ const ProfileSetup = () => {
     if (userInfo?.profileImage) {
       setImage(`${HOST}/${userInfo.profileImage}`);
     }
-  }, [
-    userInfo?.profileSetup,
-    userInfo?.profileImage,
-    userInfo?.bgColor,
-    userInfo?.firstName,
-    userInfo?.lastName,
-  ]);
+  }, [userInfo]);
 
   useEffect(() => {
     const getUserInfo = async () => {

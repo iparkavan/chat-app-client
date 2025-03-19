@@ -30,32 +30,39 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       const recieveMessageHandler = (message: MessagesTypes) => {
-        const { selectedChatData, selectedChatType, addMessage } =
-          useChatSlice.getState();
+        const {
+          selectedChatData,
+          selectedChatType,
+          addMessage,
+          addContactInDmContacts,
+        } = useChatSlice.getState();
 
         if (
           selectedChatType !== undefined &&
           (selectedChatData?._id === message.sender._id ||
             selectedChatData?._id === message.recipient._id)
         ) {
-          console.log("Message Received", message);
           addMessage(message);
         }
+        addContactInDmContacts(message);
       };
 
       const recieveChannelMessageHandler = (message: MessagesTypes) => {
-        // console.log("Channel Message Received", message);
-        const { selectedChatData, selectedChatType, addMessage } =
-          useChatSlice.getState();
+        const {
+          selectedChatData,
+          selectedChatType,
+          addMessage,
+          addChannelInChannelList,
+        } = useChatSlice.getState();
 
-        console.log("id", selectedChatData?._id, message.channelId);
         if (
           selectedChatType !== undefined &&
           selectedChatData?._id === message.channel._id
         ) {
-          console.log("Channel Message Received 45", message);
           addMessage(message);
         }
+
+        addChannelInChannelList(message);
       };
 
       socket.current.on("recieveMessage", recieveMessageHandler);

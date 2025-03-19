@@ -12,6 +12,7 @@ const UPLOAD_FILE_ROUTE = `${MESSAGESAPI}/upload-file`;
 const CHANNEL_ROUTES = `/api/channel`;
 const CREATE_CHANNEL_ROUTE = `${CHANNEL_ROUTES}/create-channel`;
 const GET_USER_CHANNEL_ROUTE = `${CHANNEL_ROUTES}/get-user-channels`;
+const GET_CHANNEL_MESSAGES = `${CHANNEL_ROUTES}/get-channel-messages`;
 
 export {
   SEARCHCONTACTSROUTES,
@@ -21,4 +22,5 @@ export {
   GET_ALL_CONTACTS_ROUTES,
   CREATE_CHANNEL_ROUTE,
   GET_USER_CHANNEL_ROUTE,
+  GET_CHANNEL_MESSAGES,
 };

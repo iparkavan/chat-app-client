@@ -6,7 +6,7 @@ import { MessagesTypes } from "@/types/messages";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { axios } from "@/lib/axios";
-import { GETALLMESSAGESROUTES } from "@/lib/api-routes";
+import { GET_CHANNEL_MESSAGES, GETALLMESSAGESROUTES } from "@/lib/api-routes";
 import Image from "next/image";
 import { bgColors, HOST } from "@/lib/constants/constsnt";
 import { MdFolderZip } from "react-icons/md";
@@ -55,8 +55,24 @@ const ChatArea = () => {
       }
     };
 
+    const getChannelMessages = async () => {
+      try {
+        const response = await axios.get(
+          `${GET_CHANNEL_MESSAGES}/${selectedChatData?._id}`,
+          { withCredentials: true }
+        );
+        if (response.data.messages) {
+          setSelectedChatMessages(response.data.messages);
+        }
+      } catch (error: any) {
+        console.log(error.message);
+        toast("Unable to fetch Messages");
+      }
+    };
+
     if (selectedChatData?._id) {
       if (selectedChatType === "contact") getMessages();
+      else if (selectedChatType === "channel") getChannelMessages();
     }
   }, [selectedChatData, selectedChatType, setSelectedChatMessages]);
 
@@ -67,45 +83,12 @@ const ChatArea = () => {
     }
   }, [selectedChatMessages]);
 
-  console.log(selectedChatMessages);
-
   // To Check if it is image
   const checkIfImage = (filePath: string) => {
     const imageRegex =
       /\.(jpg|jpeg|png|gif|bmp|tiff|tif|webp|svg|ico|heic|heif)$/i;
     return imageRegex.test(filePath);
   };
-
-  // const downloadFile = async (url: string) => {
-  //   try {
-  //     setIsDownloading(true);
-  //     setFileDownloadProgress(0);
-  //     const response = await axios.get(`${HOST}/${url}`, {
-  //       responseType: "blob",
-  //       onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
-  //         const { loaded, total } = progressEvent;
-  //         if (total) {
-  //           const percentCompleted = Math.round((loaded * 100) / total);
-  //           setFileDownloadProgress(percentCompleted);
-  //         }
-  //       },
-  //     });
-
-  //     setIsDownloading(false);
-  //   } catch (error) {
-  //     setIsDownloading(false);
-  //     console.log(error);
-  //   }
-
-  //   const urlBlob = window.URL.createObjectURL(new Blob([response.data]));
-  //   const link = document.createElement("a");
-  //   link.href = urlBlob;
-  //   link.setAttribute("download", url.split("/").pop() as string);
-  //   document.body.appendChild(link);
-  //   link.click();
-  //   link.remove();
-  //   window.URL.revokeObjectURL(urlBlob);
-  // };
 
   const downloadFile = async (url: string) => {
     try {
@@ -236,14 +219,12 @@ const ChatArea = () => {
   );
 
   const renderChannelMessage = (message: MessagesTypes): JSX.Element | null => {
-    console.log("render channel message", message);
-
     const isSender =
       (message.sender as unknown as { _id: string })._id === userInfo?.id;
     const profileImage = message?.sender?.profileImage;
     const bgColor = bgColors[message?.sender?.bgColor as number];
     const initials =
-      message?.sender?.firstName && message?.sender.lastName
+      message?.sender?.firstName && message?.sender?.lastName
         ? `${message.sender.firstName.charAt(
             0
           )}${message.sender.lastName.charAt(0)}`
@@ -252,7 +233,7 @@ const ChatArea = () => {
     return (
       <div
         className={cn(
-          "flex items-end gap-2",
+          "flex w-full items-end gap-2",
           isSender ? "justify-end" : "justify-start"
         )}
       >
@@ -279,16 +260,30 @@ const ChatArea = () => {
         )}
 
         {/* Message Content */}
-        <div className="flex w-full">
+        <div
+          className={cn(
+            "flex",
+            isSender ? "justify-end" : "justify-start",
+            "w-full"
+          )}
+        >
           {message.messageType === "text" && (
             <div
               className={cn(
-                "inline-block p-3 rounded-xl my-1 max-w-[60%] break-words",
+                "inline-block p-1.5 rounded-xl my-1 max-w-[60%] break-words",
                 isSender
-                  ? "bg-primary-foreground text-primary dark:text-primary"
-                  : "bg-primary text-white dark:bg-primary dark:text-black"
+                  ? "bg-primary-foreground text-primary dark:text-primary self-end"
+                  : "bg-primary text-white dark:bg-primary dark:text-black self-start"
               )}
             >
+              {!isSender && (
+                <div
+                  style={{ color: bgColor }}
+                  className="text-sm font-semibold"
+                >
+                  ~{message.sender.firstName} {message.sender.lastName}
+                </div>
+              )}
               {message.content}
               {/* Timestamp */}
               <div className="text-xs text-end mt-1 text-muted-foreground">
@@ -296,7 +291,65 @@ const ChatArea = () => {
               </div>
             </div>
           )}
+          {message.messageType === "file" && (
+            <div
+              className={cn(
+                `inline-block p-2 rounded-2xl my-1 max-w-[50%] break-words truncate`,
+                (message.sender as unknown as { _id: string })._id ===
+                  userInfo?.id
+                  ? "bg-primary text-white dark:bg-primary dark:text-black"
+                  : "bg-primary-foreground text-primary dark:text-primary"
+              )}
+            >
+              {!isSender && (
+                <div
+                  style={{ color: bgColor }}
+                  className="text-sm p-1 font-semibold"
+                >
+                  ~{message.sender.firstName} {message.sender.lastName}
+                </div>
+              )}
+              {checkIfImage(message.fileUrl) ? (
+                <div
+                  className="cursor-pointer rounded-md"
+                  onClick={() => {
+                    setShowImage(true);
+                    setImageUrl(message.fileUrl);
+                  }}
+                >
+                  <Image
+                    className="rounded-lg"
+                    src={`${HOST}/${message.fileUrl}`}
+                    alt="fileUrl"
+                    height={300}
+                    width={300}
+                  />
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-4">
+                  {/* {isDownloading && (
+                <p className="text-lg">{fileDownloadProgress}%</p>
+              )} */}
+                  <span className="bg-muted-foreground rounded-full p-3">
+                    <MdFolderZip />
+                  </span>
+                  <span>
+                    {message.fileUrl.split("/").pop()?.substring(0, 12)}
+                  </span>
+                  <span
+                    className="bg-black rounded-full p-3 hover:bg-muted-foreground cursor-pointer transition-all duration-300"
+                    onClick={() => downloadFile(message.fileUrl)}
+                  >
+                    <IoMdArrowRoundDown />
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
+
+        {/* Empty space for sender messages (Ensures correct right alignment) */}
+        {isSender && <div className="w-8" />}
       </div>
     );
   };
