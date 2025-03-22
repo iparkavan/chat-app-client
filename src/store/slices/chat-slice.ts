@@ -17,6 +17,10 @@ type ChatSliceTypes = {
   fileUploadProgress: number;
   fileDownloadProgress: number;
   channels: any[];
+  typingUsers: Record<
+    string,
+    { firstName: string; lastName: string; profileImage?: string | null }
+  >;
 
   setChannels: (channels: any) => void;
   setIsUploading: (isUploading: boolean) => void;
@@ -27,6 +31,7 @@ type ChatSliceTypes = {
   setSelectedChatData: (selectedChatData: ContactsTypes) => void;
   setSelectedChatMessages: (selectedChatMessages: MessagesTypes[]) => void;
   setDirectMessagesContacts: (directMessagesContacts: ContactsTypes[]) => void;
+  setTypingUsers: (users: Record<string, any>) => void;
 
   addChannels: (channel: any) => void;
   closeChat: () => void;
@@ -45,6 +50,7 @@ export const useChatSlice = create<ChatSliceTypes>()((set, get) => ({
   fileUploadProgress: 0,
   fileDownloadProgress: 0,
   channels: [],
+  typingUsers: {},
 
   setChannels: (channels: any) => set({ channels }),
   setIsUploading: (isUploading: boolean) => set({ isUploading }),
@@ -61,6 +67,7 @@ export const useChatSlice = create<ChatSliceTypes>()((set, get) => ({
     set({ selectedChatMessages }),
   setDirectMessagesContacts: (directMessagesContacts: ContactsTypes[]) =>
     set({ directMessagesContacts }),
+  setTypingUsers: (users) => set({ typingUsers: users }),
 
   addChannels: (channel: any) => {
     const channels = get().channels;

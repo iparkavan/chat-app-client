@@ -26,6 +26,7 @@ const ContactList: React.FC<ContactListProps> = ({
     selectedChatType,
     setSelectedChatType,
     setSelectedChatMessages,
+    typingUsers,
   } = useChatSlice();
 
   const handleClick = (contact: ContactsTypes) => {
@@ -96,9 +97,16 @@ const ContactList: React.FC<ContactListProps> = ({
                   </p>
                 )}
 
-                <span className="text-xs text-green-700 font-semibold">
+                {Object.values(typingUsers).map((user, index) => (
+                  <span key={index} className="flex items-center gap-1">
+                    <span className="text-xs text-green-700 font-semibold">
+                      {user.firstName} {user.lastName} is typing...
+                    </span>
+                  </span>
+                ))}
+                {/* <span className="text-xs text-green-700 font-semibold">
                   Typing...
-                </span>
+                </span> */}
               </div>
             </div>
             <div className="text-sm text-muted-foreground">12:34pm</div>

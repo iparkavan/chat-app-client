@@ -4,6 +4,7 @@ import { HOST } from "@/lib/constants/constsnt";
 import { useAuthslice } from "@/store/slices/auth-slice";
 import { useChatSlice } from "@/store/slices/chat-slice";
 import { MessagesTypes } from "@/types/messages";
+import { Lasso } from "lucide-react";
 import React, { createContext, useContext, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 
@@ -35,6 +36,8 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
           selectedChatType,
           addMessage,
           addContactInDmContacts,
+          setTypingUsers,
+          typingUsers,
         } = useChatSlice.getState();
 
         if (
@@ -64,6 +67,30 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
         addChannelInChannelList(message);
       };
+
+      socket.current?.on(
+        "typing",
+        ({ senderId, firstName, lastName, profileImage }) => {
+          console.log("typing...", firstName, lastName, profileImage);
+
+          const { setTypingUsers, typingUsers } = useChatSlice.getState();
+
+          setTypingUsers({
+            ...typingUsers,
+            [senderId]: { firstName, lastName, profileImage },
+          });
+        }
+      );
+
+      // Stop typing event handler (removes typing only when "stop-typing" is emitted)
+      socket.current?.on("stop-typing", ({ senderId }) => {
+        const { typingUsers, setTypingUsers } = useChatSlice.getState();
+
+        const updatedTypingUsers = { ...typingUsers };
+        delete updatedTypingUsers[senderId];
+
+        setTypingUsers(updatedTypingUsers);
+      });
 
       socket.current.on("recieveMessage", recieveMessageHandler);
       socket.current.on(

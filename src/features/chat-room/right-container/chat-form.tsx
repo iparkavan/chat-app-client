@@ -39,6 +39,31 @@ const ChatForm = () => {
   const [message, setMessage] = useState<string>("");
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
 
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleTyping = () => {
+    if (!isTyping) {
+      setIsTyping(true);
+      socket?.emit("typing", { recipientId: selectedChatData?._id });
+    }
+
+    // Clear the previous timeout every time the user types
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    // Set a new timeout to stop typing only if the user stops typing for 2 seconds
+    typingTimeoutRef.current = setTimeout(() => {
+      if (isTyping) {
+        setIsTyping(false);
+        socket?.emit("stop-typing", { recipientId: selectedChatData?._id });
+      }
+    }, 2000);
+  };
+
+  console.log("isTyping", isTyping);
+
   //useEffect to Close the Emoji Component
   useEffect(() => {
     const clickOutsideHandler = (event: MouseEvent) => {
@@ -181,9 +206,10 @@ const ChatForm = () => {
       <form className="w-full flex items-center" onSubmit={sendMessageHandler}>
         <input
           className="flex w-full rounded-md bg-transparent px-3 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setMessage(e.target.value)
-          }
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setMessage(e.target.value);
+            handleTyping();
+          }}
           autoFocus
           value={message}
           placeholder="Type a message"
