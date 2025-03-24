@@ -70,14 +70,19 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
       socket.current?.on(
         "typing",
-        ({ senderId, firstName, lastName, profileImage }) => {
-          console.log("typing...", firstName, lastName, profileImage);
-
-          const { setTypingUsers, typingUsers } = useChatSlice.getState();
+        ({ senderId, recipientId, firstName, lastName, profileImage }) => {
+          const { setTypingUsers, typingUsers, selectedChatData } =
+            useChatSlice.getState();
 
           setTypingUsers({
             ...typingUsers,
-            [senderId]: { firstName, lastName, profileImage },
+            [senderId]: {
+              firstName,
+              // recipientId,
+              senderId,
+              lastName,
+              profileImage,
+            },
           });
         }
       );

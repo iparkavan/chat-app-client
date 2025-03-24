@@ -19,7 +19,13 @@ type ChatSliceTypes = {
   channels: any[];
   typingUsers: Record<
     string,
-    { firstName: string; lastName: string; profileImage?: string | null }
+    {
+      senderId: string;
+      recipientId: string;
+      firstName: string;
+      lastName: string;
+      profileImage?: string | null;
+    }
   >;
 
   setChannels: (channels: any) => void;
