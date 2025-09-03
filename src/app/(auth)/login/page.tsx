@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -19,11 +19,14 @@ import { useAuthslice } from "@/store/slices/auth-slice";
 import { axios } from "@/lib/axios";
 import { LoginResponse } from "@/features/authentication/types/authentication-type";
 import { routes } from "@/lib/constants/routes";
+import { Loader } from "lucide-react";
 
 const page = () => {
   const router = useRouter();
 
   const { setUserInfo } = useAuthslice();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   // const { login } = useAuth();
 
   const {
@@ -33,25 +36,37 @@ const page = () => {
   } = useForm<LoginFields>({ resolver: zodResolver(loginSchema) });
 
   const onSubmit: SubmitHandler<LoginFields> = async ({ email, password }) => {
-    const { data } = await axios.post<LoginResponse>(
-      "/api/auth/login",
-      { email, password },
-      { withCredentials: true }
-    );
+    setIsLoading(true);
+    try {
+      const { data } = await axios.post<LoginResponse>(
+        "/api/auth/login",
+        { email, password },
+        { withCredentials: true }
+      );
 
-    if (data) {
-      setUserInfo({
-        id: data.id,
-        email: data.email,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        profileImage: data.profileImage,
-        profileSetup: data.profileSetup,
-        bgColor: data.bgColor,
-      });
+      console.log("Login response data:", data);
 
-      if (data.profileSetup) router.push(routes.chatPage);
-      else router.push(routes.profileSetup);
+      if (data) {
+        setUserInfo({
+          id: data.id,
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          profileImage: data.profileImage,
+          profileSetup: data.profileSetup,
+          bgColor: data.bgColor,
+        });
+
+        setIsLoading(false);
+
+        if (data.profileSetup) router.push(routes.chatPage);
+        else router.push(routes.profileSetup);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Login error:", error);
+      setError("Invalid Username and Password");
+      return;
     }
 
     // const data = await postLoginAction({ Useremail, Password });
@@ -82,6 +97,9 @@ const page = () => {
             Enter your email below to login to your account
           </p>
         </div>
+        <span className="text-center text-red-500 font-semibold">
+          {error && error}
+        </span>
         <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
@@ -116,7 +134,7 @@ const page = () => {
           </div>
 
           <Button type="submit" className="w-full">
-            {/* <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> */}
+            {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
             Login
           </Button>
         </form>
