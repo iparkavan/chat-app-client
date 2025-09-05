@@ -5,7 +5,6 @@ import { Providers } from "@/common/providers";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { useEffect } from "react";
-import ClientProviders from "@/lib/client-providers";
 import { SocketProvider } from "@/context/socket-context";
 
 const inter = Inter({ subsets: ["latin"] });

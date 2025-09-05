@@ -6,6 +6,8 @@
 //   "refresh_token": string
 // }
 
+export const ACCESS_TOKEN = "__access-token";
+
 export type SignupResponse = {
   bgColor: number | null;
   id: string;
@@ -14,6 +16,7 @@ export type SignupResponse = {
   profileSetup: boolean;
   firstName: string;
   lastName: string;
+  token: string;
 };
 
 export type ImageChangeResponse = {
@@ -28,4 +31,5 @@ export type LoginResponse = {
   profileSetup: boolean;
   firstName: string;
   lastName: string;
+  token: string;
 };

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { SubmitHandler, useForm } from "react-hook-form";
+import Cookies from "js-cookie";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -18,6 +19,7 @@ import { SignupResponse } from "@/features/authentication/types/authentication-t
 import { axios } from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { useAuthslice } from "@/store/slices/auth-slice";
+import { ACCESS_TOKEN } from "@/lib/constants/variables";
 
 const page = () => {
   const router = useRouter();
@@ -50,6 +52,12 @@ const page = () => {
         profileImage: response.data.profileImage,
         profileSetup: response.data.profileSetup,
         bgColor: response.data.bgColor,
+      });
+
+      Cookies.set(ACCESS_TOKEN, response.data.token, {
+        expires: 7, // 7 days
+        secure: true, // only send on https
+        sameSite: "none", // prevents CSRF in most cases
       });
 
       router.push("/profile-setup");

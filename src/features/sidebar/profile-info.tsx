@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { IoPowerSharp } from "react-icons/io5";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
 
 const ProfileInfo = () => {
   const router = useRouter();
@@ -25,11 +26,12 @@ const ProfileInfo = () => {
     try {
       const response = await axios.post(
         `/api/auth/logout`,
-        {},
-        { withCredentials: true }
+        {}
+        // { withCredentials: true }
       );
 
       if (response.status === 200) {
+        Cookies.remove("access_token");
         router.push(routes.login);
         setUserInfo(undefined);
       }

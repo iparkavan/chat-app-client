@@ -20,6 +20,8 @@ import { axios } from "@/lib/axios";
 import { LoginResponse } from "@/features/authentication/types/authentication-type";
 import { routes } from "@/lib/constants/routes";
 import { Loader } from "lucide-react";
+import Cookies from "js-cookie";
+import { ACCESS_TOKEN } from "@/lib/constants/variables";
 
 const page = () => {
   const router = useRouter();
@@ -40,8 +42,8 @@ const page = () => {
     try {
       const { data } = await axios.post<LoginResponse>(
         "/api/auth/login",
-        { email, password },
-        { withCredentials: true }
+        { email, password }
+        // { withCredentials: true }
       );
 
       console.log("Login response data:", data);
@@ -55,6 +57,12 @@ const page = () => {
           profileImage: data.profileImage,
           profileSetup: data.profileSetup,
           bgColor: data.bgColor,
+        });
+
+        Cookies.set(ACCESS_TOKEN, data.token, {
+          expires: 7, // 7 days
+          secure: true, // only send on https
+          sameSite: "none", // prevents CSRF in most cases
         });
 
         setIsLoading(false);
