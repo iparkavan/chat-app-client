@@ -16,6 +16,7 @@ import React from "react";
 import { IoPowerSharp } from "react-icons/io5";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
+import { ACCESS_TOKEN } from "@/lib/constants/variables";
 
 const ProfileInfo = () => {
   const router = useRouter();
@@ -25,13 +26,13 @@ const ProfileInfo = () => {
   const logoutHandler = async () => {
     try {
       const response = await axios.post(
-        `/api/auth/logout`,
-        {}
+        `/api/auth/logout`
+        // {}
         // { withCredentials: true }
       );
 
       if (response.status === 200) {
-        Cookies.remove("access_token");
+        Cookies.remove(ACCESS_TOKEN);
         router.push(routes.login);
         setUserInfo(undefined);
       }
