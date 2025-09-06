@@ -29,7 +29,7 @@ const ChatHeader = () => {
                   />
                 </Avatar>
               ) : (
-                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-50">
+                <div className="w-12 text-black h-12 flex items-center justify-center rounded-full bg-gray-50">
                   #
                 </div>
               )}
@@ -52,7 +52,7 @@ const ChatHeader = () => {
                     : selectedChatData?.email?.split("").shift()}
                 </div>
               ) : (
-                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-50">
+                <div className="w-12 h-12 text-black flex items-center justify-center rounded-full bg-gray-50">
                   #
                 </div>
               )}
@@ -79,8 +79,8 @@ const ChatHeader = () => {
       </div>
 
       <div className="">
-        <Button variant={"ghost"} size={"icon"}>
-          <RiCloseFill className="" onClick={closeChat} />
+        <Button variant={"ghost"} size={"icon"} onClick={closeChat}>
+          <RiCloseFill className="" />
         </Button>
       </div>
     </div>

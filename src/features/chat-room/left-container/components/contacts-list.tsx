@@ -58,7 +58,7 @@ const ContactList: React.FC<ContactListProps> = ({
               className={cn(
                 "flex w-full cursor-pointer hover:bg-muted rounded-2xl p-2 items-center justify-between",
                 selectedChatData && selectedChatData?._id === contact._id
-                  ? "bg-bgActive hover:bg-bgHover"
+                  ? "bg-bgActive hover:bg-bgHover dark:bg-[#515151]"
                   : "hover:bg-muted"
               )}
               onClick={() => handleClick(contact)}
@@ -90,7 +90,7 @@ const ContactList: React.FC<ContactListProps> = ({
                   </div>
                 )}
                 {isChannel && (
-                  <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-50">
+                  <div className="w-12 h-12 flex items-center justify-center rounded-full text-black bg-gray-50">
                     #
                   </div>
                 )}

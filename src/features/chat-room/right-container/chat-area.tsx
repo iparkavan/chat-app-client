@@ -155,13 +155,16 @@ const ChatArea = () => {
       {message.messageType === "text" && (
         <div
           className={cn(
-            `inline-block p-2 rounded-2xl my-1 max-w-[50%] break-words`,
+            `inline-block p-2 rounded-2xl my-1 max-w-[50%] break-words drop-shadow-md`,
             message.sender !== selectedChatData?._id
-              ? "bg-primary text-white dark:bg-primary dark:text-black"
-              : "bg-primary-foreground text-primary dark:text-primary"
+              ? "bg-[#d9fdd3] text-black text-left dark:bg-[#005c4b] dark:text-white"
+              : "bg-gray-100 text-black dark:bg-[#353535] dark:text-white"
           )}
         >
           {message.content}
+          <div className="text-xs text-muted-foreground text-end">
+            {moment(message.timestamp).format("LT")}
+          </div>
         </div>
       )}
 
@@ -169,10 +172,10 @@ const ChatArea = () => {
       {message.messageType === "file" && (
         <div
           className={cn(
-            `inline-block p-2 rounded-2xl my-1 max-w-[50%] break-words truncate`,
+            `inline-block p-2 rounded-2xl my-1 max-w-[50%] break-words truncate drop-shadow-md`,
             message.sender !== selectedChatData?._id
-              ? "bg-primary text-white dark:bg-primary dark:text-black"
-              : "bg-primary-foreground text-primary dark:text-primary"
+              ? "bg-[#d9fdd3] text-white dark:bg-[#005c4b] dark:text-white"
+              : "bg-gray-100 text-black dark:bg-[#353535] dark:text-white"
           )}
         >
           {checkIfImage(message.fileUrl) ? (
@@ -210,9 +213,9 @@ const ChatArea = () => {
           )}
         </div>
       )}
-      <div className="text-xs px-3 text-muted-foreground">
+      {/* <div className="text-xs px-3 text-muted-foreground">
         {moment(message.timestamp).format("LT")}
-      </div>
+      </div> */}
     </div>
   );
 
@@ -270,8 +273,8 @@ const ChatArea = () => {
               className={cn(
                 "inline-block p-1.5 rounded-xl my-1 max-w-[60%] break-words",
                 isSender
-                  ? "bg-primary-foreground text-primary dark:text-primary self-end"
-                  : "bg-primary text-white dark:bg-primary dark:text-black self-start"
+                  ? "bg-[#d9fdd3] text-black dark:bg-[#005c4b] dark:text-white"
+                  : "bg-gray-100 text-black dark:bg-[#353535] dark:text-white"
               )}
             >
               {!isSender && (
@@ -292,11 +295,11 @@ const ChatArea = () => {
           {message.messageType === "file" && (
             <div
               className={cn(
-                `inline-block p-2 rounded-2xl my-1 max-w-[50%] break-words truncate`,
+                `inline-block p-2 rounded-2xl my-1 max-w-[50%] break-words truncate drop-shadow-md`,
                 (message.sender as unknown as { _id: string })._id ===
                   userInfo?.id
-                  ? "bg-primary text-white dark:bg-primary dark:text-black"
-                  : "bg-primary-foreground text-primary dark:text-primary"
+                  ? "bg-[#d9fdd3] dark:bg-[#005c4b] text-black dark:text-white"
+                  : "bg-gray-100 text-black dark:bg-[#353535] dark:text-white"
               )}
             >
               {!isSender && (
