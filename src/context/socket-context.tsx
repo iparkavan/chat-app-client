@@ -15,7 +15,6 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const { userInfo } = useAuthslice();
 
   const host = HOST ?? "default_host_value";
-  console.log("Socket connecting to:", host);
 
   useEffect(() => {
     if (userInfo) {

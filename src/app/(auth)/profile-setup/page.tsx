@@ -16,15 +16,9 @@ import { routes } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils";
 import { useAuthslice } from "@/store/slices/auth-slice";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AvatarIcon, ReloadIcon } from "@radix-ui/react-icons";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-import React, {
-  ChangeEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { toast } from "sonner";

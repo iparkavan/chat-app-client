@@ -50,7 +50,6 @@ const ChatArea = () => {
           setSelectedChatMessages(response.data.messages);
         }
       } catch (error: any) {
-        console.log(error.message);
         toast("Unable to fetch Messages");
       }
     };
@@ -65,7 +64,6 @@ const ChatArea = () => {
           setSelectedChatMessages(response.data.messages);
         }
       } catch (error: any) {
-        console.log(error.message);
         toast("Unable to fetch Messages");
       }
     };

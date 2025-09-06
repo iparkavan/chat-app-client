@@ -46,8 +46,6 @@ const page = () => {
         // { withCredentials: true }
       );
 
-      console.log("Login response data:", data);
-
       if (data) {
         setUserInfo({
           id: data.id,
@@ -141,7 +139,7 @@ const page = () => {
             )}
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
             Login
           </Button>

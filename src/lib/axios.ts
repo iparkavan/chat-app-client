@@ -1,9 +1,21 @@
 // import { useAuth } from "@/store/auth-store"
-import  Axios from "axios"
+import Axios from "axios";
+import Cookies from "js-cookie";
+import { ACCESS_TOKEN } from "./constants/variables";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_NODE_BACKEND_URL
+const API_BASE_URL = process.env.NEXT_PUBLIC_NODE_BACKEND_URL;
 
-const axios = Axios.create({ baseURL: API_BASE_URL})
+const axios = Axios.create({ baseURL: API_BASE_URL });
+
+axios.interceptors.request.use((config) => {
+  const token = Cookies.get(ACCESS_TOKEN);
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export default axios;
 
 // const axiosPrivate = Axios.create({ baseURL: API_BASE_URL})
 
@@ -33,7 +45,4 @@ const axios = Axios.create({ baseURL: API_BASE_URL})
 //   }
 // )
 
-
-export {
-  axios,
-}
+export { axios };

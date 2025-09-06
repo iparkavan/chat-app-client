@@ -1,7 +1,7 @@
 "use client";
 
 /* eslint-disable react-hooks/rules-of-hooks */
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -20,10 +20,14 @@ import { axios } from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { useAuthslice } from "@/store/slices/auth-slice";
 import { ACCESS_TOKEN } from "@/lib/constants/variables";
+import { Loader } from "lucide-react";
 
 const page = () => {
   const router = useRouter();
   const { setUserInfo } = useAuthslice();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const {
     handleSubmit,
@@ -32,35 +36,47 @@ const page = () => {
   } = useForm<SignupFields>({ resolver: zodResolver(signupSchema) });
 
   const onSubmit: SubmitHandler<SignupFields> = async ({
-    firstName,
-    lastName,
+    // firstName,
+    // lastName,
     email,
     password,
   }) => {
-    const response = await axios.post<SignupResponse>(
-      "/api/auth/signup",
-      { firstName, lastName, email, password },
-      { withCredentials: true }
-    );
+    try {
+      setIsLoading(true);
+      const response = await axios.post<SignupResponse>(
+        "/api/auth/signup",
+        {
+          // firstName, lastName,
+          email,
+          password,
+        }
+        // { withCredentials: true }
+      );
 
-    if (response.status === 201) {
-      setUserInfo({
-        id: response.data.id,
-        email: response.data.email,
-        firstName: response.data.firstName,
-        lastName: response.data.lastName,
-        profileImage: response.data.profileImage,
-        profileSetup: response.data.profileSetup,
-        bgColor: response.data.bgColor,
-      });
+      if (response.status === 201) {
+        setUserInfo({
+          id: response.data.id,
+          email: response.data.email,
+          firstName: response.data.firstName,
+          lastName: response.data.lastName,
+          profileImage: response.data.profileImage,
+          profileSetup: response.data.profileSetup,
+          bgColor: response.data.bgColor,
+        });
 
-      Cookies.set(ACCESS_TOKEN, response.data.token, {
-        expires: 7, // 7 days
-        secure: true, // only send on https
-        sameSite: "none", // prevents CSRF in most cases
-      });
+        Cookies.set(ACCESS_TOKEN, response.data.token, {
+          expires: 7, // 7 days
+          secure: true, // only send on https
+          sameSite: "none", // prevents CSRF in most cases
+        });
 
-      router.push("/profile-setup");
+        router.push("/profile-setup");
+        setIsLoading(false);
+      }
+    } catch (error: Error | any) {
+      console.error("Signup error:", error);
+      setError(error?.response.data.message || "Something went wrong");
+      setIsLoading(false);
     }
   };
 
@@ -76,9 +92,12 @@ const page = () => {
             Enter your information to create an account
           </p>
         </div>
+        <span className="text-center text-red-500 font-semibold">
+          {error && error}
+        </span>
         <div>
           <div className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
+            {/* <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="first-name">First name</Label>
                 <Input
@@ -105,7 +124,7 @@ const page = () => {
                   </span>
                 )}
               </div>
-            </div>
+            </div> */}
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -129,7 +148,8 @@ const page = () => {
                 </span>
               )}
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
               Create an account
             </Button>
             <Button variant="outline" className="w-full">
@@ -139,7 +159,7 @@ const page = () => {
           <div className="mt-4 text-center text-sm">
             Already have an account?{" "}
             <Link href="/login" className="underline">
-              Login
+              Signin
             </Link>
           </div>
         </div>

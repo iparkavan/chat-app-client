@@ -23,6 +23,7 @@ import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { bgColors, HOST } from "@/lib/constants/constsnt";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { toast } from "sonner";
 
 interface AddNewContactProps {
   isNewContactModal: boolean;
@@ -56,7 +57,7 @@ const AddNewContact = ({
         setSearchedContacts([]);
       }
     } catch (error: any) {
-      console.log(error.message);
+      toast(error.message);
     }
   };
 

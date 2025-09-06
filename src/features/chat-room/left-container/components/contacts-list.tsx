@@ -29,7 +29,6 @@ const ContactList: React.FC<ContactListProps> = ({
     setSelectedChatMessages,
     typingUsers,
   } = useChatSlice();
-  // console.log("typingUsers", typingUsers);
 
   const handleClick = (contact: ContactsTypes) => {
     if (isChannel) setSelectedChatType("channel");
@@ -47,8 +46,6 @@ const ContactList: React.FC<ContactListProps> = ({
           const filteredTypingUsers = Object.values(typingUsers).filter(
             (user) => user.senderId === contact._id
           );
-
-          console.log("filteredTypingUsers", filteredTypingUsers);
 
           return (
             <motion.div

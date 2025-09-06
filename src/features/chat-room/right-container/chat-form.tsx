@@ -62,8 +62,6 @@ const ChatForm = () => {
     }, 2000);
   };
 
-  console.log("isTyping", isTyping);
-
   //useEffect to Close the Emoji Component
   useEffect(() => {
     const clickOutsideHandler = (event: MouseEvent) => {
@@ -121,7 +119,6 @@ const ChatForm = () => {
   ) => {
     try {
       const file = event.target.files?.[0];
-      // console.log(file);
       if (file) {
         const formData = new FormData();
         formData.append("file", file);

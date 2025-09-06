@@ -38,7 +38,6 @@ const ChatUsersContainer = () => {
           setDirectMessagesContacts(response.data.contacts);
         }
       } catch (error: any) {
-        console.log(error);
         toast(error.message);
       }
     };
@@ -53,7 +52,6 @@ const ChatUsersContainer = () => {
           setChannels(response.data.channels);
         }
       } catch (error: any) {
-        console.log(error);
         toast(error.message);
       }
     };

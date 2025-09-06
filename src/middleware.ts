@@ -6,9 +6,6 @@ export async function middleware(request: NextRequest) {
   const { nextUrl } = request;
   const token = request.cookies.get(ACCESS_TOKEN)?.value;
 
-  console.log("Middleware Cookies:", request.cookies.getAll()); // Debugging
-  console.log("Middleware king:", token); // Debugging
-
   const publicRoutes = ["/login", "/signup"].includes(nextUrl.pathname);
 
   if (publicRoutes && token) {
