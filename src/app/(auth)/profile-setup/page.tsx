@@ -68,7 +68,7 @@ const ProfileSetup = () => {
     const getUserInfo = async () => {
       try {
         const response = await axios.get(`/api/auth/get-userinfo`, {
-          withCredentials: true,
+          // withCredentials: true,
         });
         if (response?.status === 200 && response.data.id) {
           setUserInfo(response.data);
@@ -105,8 +105,8 @@ const ProfileSetup = () => {
           firstName,
           lastName,
           bgColor,
-        },
-        { withCredentials: true }
+        }
+        // { withCredentials: true }
       );
       if (response.status === 200 && response.data) {
         setUserInfo({ ...response.data });
@@ -134,10 +134,10 @@ const ProfileSetup = () => {
 
       const response = await axios.post<ImageChangeResponse>(
         `/api/auth/add-profile-image`,
-        formData,
-        {
-          withCredentials: true,
-        }
+        formData
+        // {
+        //   withCredentials: true,
+        // }
       );
 
       if (response.status === 200 && response.data.profileImage) {
@@ -161,7 +161,7 @@ const ProfileSetup = () => {
   const handleDeleteImage = async () => {
     try {
       const response = await axios.delete("/api/auth/remove-profile-image", {
-        withCredentials: true,
+        // withCredentials: true,
       });
 
       if (response.status === 200) {

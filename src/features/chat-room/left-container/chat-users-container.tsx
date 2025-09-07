@@ -31,7 +31,7 @@ const ChatUsersContainer = () => {
     const getContacts = async () => {
       try {
         const response = await axios.get(GET_DM_CONTACTS_ROUTES, {
-          withCredentials: true,
+          // withCredentials: true,
         });
 
         if (response.data.contacts) {
@@ -45,7 +45,7 @@ const ChatUsersContainer = () => {
     const getChannels = async () => {
       try {
         const response = await axios.get(GET_USER_CHANNEL_ROUTE, {
-          withCredentials: true,
+          // withCredentials: true,
         });
 
         if (response.data.channels) {

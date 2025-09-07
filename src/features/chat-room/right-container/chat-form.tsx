@@ -125,7 +125,7 @@ const ChatForm = () => {
 
         setIsUploading(true);
         const response = await axios.post(UPLOAD_FILE_ROUTE, formData, {
-          withCredentials: true,
+          // withCredentials: true,
           onUploadProgress: (data: AxiosProgressEvent) => {
             if (data && data.total) {
               setFileUploadProgress(

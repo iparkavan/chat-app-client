@@ -54,7 +54,7 @@ const CreateChannel = () => {
   useEffect(() => {
     const getData = async () => {
       const response = await axios.get(GET_ALL_CONTACTS_ROUTES, {
-        withCredentials: true,
+        // withCredentials: true,
       });
       if (response.status === 200) {
         setAllContacts(response.data.contacts);
@@ -71,8 +71,8 @@ const CreateChannel = () => {
           {
             name: channelName,
             members: selectedContacts.map((item) => item.value),
-          },
-          { withCredentials: true }
+          }
+          // { withCredentials: true }
         );
 
         if (response.status === 201) {

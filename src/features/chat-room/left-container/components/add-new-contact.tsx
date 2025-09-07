@@ -45,7 +45,7 @@ const AddNewContact = ({
           SEARCHCONTACTSROUTES,
           { searchTerms },
           {
-            withCredentials: true,
+            // withCredentials: true,
           }
         );
         if (response.status === 200 && response.data.contacts) {

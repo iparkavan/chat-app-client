@@ -43,8 +43,8 @@ const ChatArea = () => {
           GETALLMESSAGESROUTES,
           {
             user2: selectedChatData?._id,
-          },
-          { withCredentials: true }
+          }
+          // { withCredentials: true }
         );
         if (response.data.messages) {
           setSelectedChatMessages(response.data.messages);
@@ -57,8 +57,8 @@ const ChatArea = () => {
     const getChannelMessages = async () => {
       try {
         const response = await axios.get(
-          `${GET_CHANNEL_MESSAGES}/${selectedChatData?._id}`,
-          { withCredentials: true }
+          `${GET_CHANNEL_MESSAGES}/${selectedChatData?._id}`
+          // { withCredentials: true }
         );
         if (response.data.messages) {
           setSelectedChatMessages(response.data.messages);
