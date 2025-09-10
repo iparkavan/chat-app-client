@@ -6,7 +6,7 @@ const nextConfig = {
     domains: [
       "lh3.googleusercontent.com",
       "localhost",
-      "chat-app-server-q8xe.onrender.com",
+      "sync-app-server.onrender.com",
     ],
   },
   typescript: {
@@ -36,7 +36,7 @@ const nextConfig = {
       // },
       {
         source: "/api/:path*",
-        destination: "https://your-backend.onrender.com/api/:path*",
+        destination: "https://chat-app-client-rose.vercel.app/api/:path*",
       },
     ];
   },
