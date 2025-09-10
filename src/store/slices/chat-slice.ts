@@ -125,7 +125,7 @@ export const useChatSlice = create<ChatSliceTypes>()((set, get) => ({
   addContactInDmContacts: (message: MessagesTypes) => {
     const { userInfo } = useAuthslice.getState();
 
-    const userId = userInfo?.id;
+    const userId = userInfo?._id;
 
     const fromId =
       message.sender._id === userId

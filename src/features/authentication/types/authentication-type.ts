@@ -10,7 +10,7 @@ export const ACCESS_TOKEN = "__access-token";
 
 export type SignupResponse = {
   bgColor: number | null;
-  id: string;
+  _id: string;
   email: string;
   profileImage: string;
   profileSetup: boolean;
@@ -23,13 +23,19 @@ export type ImageChangeResponse = {
   profileImage: string;
 };
 
-export type LoginResponse = {
-  bgColor: number | null;
-  id: string;
+export interface User {
+  _id: string;
   email: string;
-  profileImage: string;
   profileSetup: boolean;
+  profileImage: string;
+  bgColor: number;
+  __v: number;
   firstName: string;
   lastName: string;
+}
+
+export interface LoginResponse {
+  message: string;
+  user: User;
   token: string;
-};
+}

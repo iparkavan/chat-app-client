@@ -15,8 +15,10 @@ const ClientProviders = ({ children }: { children: React.ReactNode }) => {
         const response = await axios.get(`/api/auth/get-userinfo`, {
           // withCredentials: true,
         });
-        if (response?.status === 200 && response.data.id) {
-          setUserInfo(response.data);
+        if (response?.status === 200 && response.data.userInfo._id) {
+          setUserInfo({
+            ...response.data.userInfo,
+          });
         } else {
           setUserInfo(undefined);
         }

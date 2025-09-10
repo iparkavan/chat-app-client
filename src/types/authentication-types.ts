@@ -10,7 +10,7 @@ type UserInfoTypes =
       lastName: string | null;
       profileImage: string | null;
       profileSetup: boolean;
-      id: string | null;
+      _id: string | null;
       bgColor: number | null;
     }
   | undefined;

@@ -24,21 +24,24 @@ const ProfileInfo = () => {
   const { userInfo, setUserInfo } = useAuthslice();
 
   const logoutHandler = async () => {
-    try {
-      const response = await axios.post(
-        `/api/auth/logout`
-        // {}
-        // { withCredentials: true }
-      );
+    Cookies.remove(ACCESS_TOKEN);
+    router.push(routes.login);
+    setUserInfo(undefined);
 
-      if (response.status === 200) {
-        Cookies.remove(ACCESS_TOKEN);
-        router.push(routes.login);
-        setUserInfo(undefined);
-      }
-    } catch (error) {
-      toast("There is problem with logging out");
-    }
+    // try {
+    //   // const response = await axios.post(
+    //   //   `/api/auth/logout`
+    //   //   // {}
+    //   //   // { withCredentials: true }
+    //   // );
+    //   if (response.status === 200) {
+    //     Cookies.remove(ACCESS_TOKEN);
+    //     router.push(routes.login);
+    //     setUserInfo(undefined);
+    //   }
+    // } catch (error) {
+    //   toast("There is problem with logging out");
+    // }
   };
   return (
     <div className="">

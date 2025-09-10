@@ -53,15 +53,11 @@ const page = () => {
         // { withCredentials: true }
       );
 
+      console.log("response", response);
+
       if (response.status === 201) {
         setUserInfo({
-          id: response.data.id,
-          email: response.data.email,
-          firstName: response.data.firstName,
-          lastName: response.data.lastName,
-          profileImage: response.data.profileImage,
-          profileSetup: response.data.profileSetup,
-          bgColor: response.data.bgColor,
+          ...response.data,
         });
 
         Cookies.set(ACCESS_TOKEN, response.data.token, {

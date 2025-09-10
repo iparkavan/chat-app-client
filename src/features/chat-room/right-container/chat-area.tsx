@@ -221,7 +221,7 @@ const ChatArea = () => {
 
   const renderChannelMessage = (message: MessagesTypes): JSX.Element | null => {
     const isSender =
-      (message.sender as unknown as { _id: string })._id === userInfo?.id;
+      (message.sender as unknown as { _id: string })._id === userInfo?._id;
     const profileImage = message?.sender?.profileImage;
     const bgColor = bgColors[message?.sender?.bgColor as number];
     const initials =
@@ -297,7 +297,7 @@ const ChatArea = () => {
               className={cn(
                 `inline-block p-2 rounded-2xl my-1 max-w-[50%] break-words truncate drop-shadow-md`,
                 (message.sender as unknown as { _id: string })._id ===
-                  userInfo?.id
+                  userInfo?._id
                   ? "bg-[#d9fdd3] dark:bg-[#005c4b] text-black dark:text-white"
                   : "bg-gray-100 text-black dark:bg-[#353535] dark:text-white"
               )}

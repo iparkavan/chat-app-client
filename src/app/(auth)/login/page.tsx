@@ -46,15 +46,11 @@ const page = () => {
         // { withCredentials: true }
       );
 
+      console.log("data", data);
+
       if (data) {
         setUserInfo({
-          id: data.id,
-          email: data.email,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          profileImage: data.profileImage,
-          profileSetup: data.profileSetup,
-          bgColor: data.bgColor,
+          ...data.user,
         });
 
         Cookies.set(ACCESS_TOKEN, data.token, {
@@ -65,7 +61,7 @@ const page = () => {
 
         setIsLoading(false);
 
-        if (data.profileSetup) router.push(routes.chatPage);
+        if (data.user.profileSetup) router.push(routes.chatPage);
         else router.push(routes.profileSetup);
       }
     } catch (error) {

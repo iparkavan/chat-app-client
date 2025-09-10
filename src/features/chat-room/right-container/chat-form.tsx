@@ -89,7 +89,7 @@ const ChatForm = () => {
     e.preventDefault();
     if (selectedChatType === "contact") {
       socket?.emit("sendMessage", {
-        sender: userInfo?.id,
+        sender: userInfo?._id,
         content: message,
         recipient: selectedChatData?._id,
         messageType: "text",
@@ -97,7 +97,7 @@ const ChatForm = () => {
       });
     } else if (selectedChatType === "channel") {
       socket?.emit("send-channel-message", {
-        sender: userInfo?.id,
+        sender: userInfo?._id,
         content: message,
         channelId: selectedChatData?._id,
         messageType: "text",
@@ -139,7 +139,7 @@ const ChatForm = () => {
           setIsUploading(false);
           if (selectedChatType === "contact") {
             socket?.emit("sendMessage", {
-              sender: userInfo?.id,
+              sender: userInfo?._id,
               content: undefined,
               recipient: selectedChatData?._id,
               messageType: "file",
@@ -147,7 +147,7 @@ const ChatForm = () => {
             });
           } else if (selectedChatType === "channel") {
             socket?.emit("send-channel-message", {
-              sender: userInfo?.id,
+              sender: userInfo?._id,
               content: undefined,
               channelId: selectedChatData?._id,
               messageType: "file",
